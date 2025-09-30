@@ -25,7 +25,9 @@ export async function getUsers(_req: Request, res: Response, next: NextFunction)
 
 export async function getUserById(req: Request, res: Response, next: NextFunction) {
   try {
-    const user = await service.findOne(req.params.id);
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ message: 'id is required' });
+    const user = await service.findOne(id);
     res.json(mapToResponseDto(user));
   } catch (err) {
     next(err);
@@ -34,7 +36,9 @@ export async function getUserById(req: Request, res: Response, next: NextFunctio
 
 export async function getUserProfile(req: Request, res: Response, next: NextFunction) {
   try {
-    const user = await service.findOne(req.params.id);
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ message: 'id is required' });
+    const user = await service.findOne(id);
     res.json(mapToProfileResponseDto(user));
   } catch (err) {
     next(err);
@@ -44,7 +48,9 @@ export async function getUserProfile(req: Request, res: Response, next: NextFunc
 export async function updateUser(req: Request, res: Response, next: NextFunction) {
   try {
     const dto: UpdateUserDto = req.body;
-    const user = await service.update(req.params.id, dto);
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ message: 'id is required' });
+    const user = await service.update(id, dto);
     res.json(mapToResponseDto(user));
   } catch (err) {
     next(err);
@@ -53,7 +59,9 @@ export async function updateUser(req: Request, res: Response, next: NextFunction
 
 export async function updatePreferences(req: Request, res: Response, next: NextFunction) {
   try {
-    const user = await service.updatePreferences(req.params.id, req.body);
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ message: 'id is required' });
+    const user = await service.updatePreferences(id, req.body);
     res.json(mapToResponseDto(user));
   } catch (err) {
     next(err);
@@ -62,7 +70,9 @@ export async function updatePreferences(req: Request, res: Response, next: NextF
 
 export async function deleteUser(req: Request, res: Response, next: NextFunction) {
   try {
-    await service.remove(req.params.id);
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ message: 'id is required' });
+    await service.remove(id);
     res.status(204).send();
   } catch (err) {
     next(err);

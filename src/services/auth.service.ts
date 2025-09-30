@@ -7,6 +7,11 @@ export interface SignupDto {
   password: string;
   full_name: string;
   city: string;
+  user_preferences: {
+    last_zakat_date: string | Date;
+    zakat_reminders_enabled: boolean;
+    campaign_updates_enabled: boolean;
+  };
 }
 
 export interface SigninDto {
@@ -29,8 +34,14 @@ export class AuthService {
       city: payload.city,
       password_hash,
     });
-    const token = signToken({ sub: user._id.toString(), email: user.email });
-    return { token, user: { id: user._id.toString(), email: user.email, full_name: user.full_name } };
+
+    if (!user?.id) {
+      const error: any = new Error('User not created');
+      error.status = 500;
+      throw error;
+    }
+    const token = signToken({ sub: user.id, email: user.email });
+    return { token, user: { id: user.id, email: user.email, full_name: user.full_name } };
   }
 
   async signin(payload: SigninDto) {
@@ -46,8 +57,8 @@ export class AuthService {
       error.status = 401;
       throw error;
     }
-    const token = signToken({ sub: user._id.toString(), email: user.email });
-    return { token, user: { id: user._id.toString(), email: user.email, full_name: user.full_name } };
+    const token = signToken({ sub: user.id, email: user.email });
+    return { token, user: { id: user.id, email: user.email, full_name: user.full_name } };
   }
 }
 

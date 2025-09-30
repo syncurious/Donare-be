@@ -8,15 +8,20 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
     const body = req.body || {};
     const email = body.email ?? body.username ?? body.user?.email;
     const password = body.password ?? body.pass;
-    const full_name = body.full_name ?? body.name ?? body.fullName;
+    const full_name = body.full_name ?? body.name ?? body.full_name;
     const city = body.city ?? body.location?.city ?? body.town;
     const missing: string[] = [];
     if (!email) missing.push('email');
     if (!password) missing.push('password');
-    if (!full_name) missing.push('full_name');
+    if (!full_name) missing.push('fullName');
     if (!city) missing.push('city');
+    const user_preferences = body.user_preferences ?? {
+      last_zakat_date: new Date(),
+      zakat_reminders_enabled: false,
+      campaign_updates_enabled: false,
+    };
     if (missing.length) return res.status(400).json({ message: `Missing fields: ${missing.join(', ')}` });
-    const result = await service.signup({ email, password, full_name, city });
+    const result = await service.signup({ email, password, full_name, city, user_preferences });
     res.status(201).json(result);
   } catch (err) {
     next(err);
