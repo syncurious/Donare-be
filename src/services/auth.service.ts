@@ -1,17 +1,11 @@
 import { UserModel } from '../models/User.js';
-import { hashPassword, comparePassword } from '../utils/password.js';
-import { signToken } from '../middlewares/auth.js';
+import { hashPassword } from '../utils/password.js';
 
 export interface SignupDto {
   email: string;
   password: string;
-  full_name: string;
+  fullName: string;
   city: string;
-}
-
-export interface SigninDto {
-  email: string;
-  password: string;
 }
 
 export class AuthService {
@@ -25,31 +19,12 @@ export class AuthService {
     const password_hash = await hashPassword(payload.password);
     const user = await UserModel.create({
       email: payload.email,
-      full_name: payload.full_name,
+      full_name: payload.fullName,
       city: payload.city,
       password_hash,
     });
-    const token = signToken({ sub: user._id.toString(), email: user.email });
-    return { token, user: { id: user._id.toString(), email: user.email, full_name: user.full_name } };
-  }
-
-  async signin(payload: SigninDto) {
-    const user = await UserModel.findOne({ email: payload.email });
-    if (!user || !user.password_hash) {
-      const error: any = new Error('Invalid credentials');
-      error.status = 401;
-      throw error;
-    }
-    const ok = await comparePassword(payload.password, user.password_hash);
-    if (!ok) {
-      const error: any = new Error('Invalid credentials');
-      error.status = 401;
-      throw error;
-    }
-    const token = signToken({ sub: user._id.toString(), email: user.email });
-    return { token, user: { id: user._id.toString(), email: user.email, full_name: user.full_name } };
+    return { id: user?._id?.toString(), email: user.email, fullName: user.full_name, city: user.city };
   }
 }
-
 
 

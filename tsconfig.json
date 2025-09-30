@@ -1,49 +1,36 @@
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
-  "compilerOptions": {
-    // File Layout
-    "rootDir": "src",
-    "outDir": "dist",
+    "compilerOptions": {
+        // Paths
+        "rootDir": "src",
+        "outDir": "dist",
 
-    // Environment Settings
-    // See also https://aka.ms/tsconfig/module
-    "module": "Node16",
-    "target": "es2021",
-    "types": [],
-    // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
-    // and npm install -D @types/node
+        // Language and Module
+        "target": "es2021",
+        "module": "Node16",
+        "moduleResolution": "node16",
+        "jsx": "react-jsx",
 
-    // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
+        // Type Checking
+        "strict": true,
+        "noUncheckedIndexedAccess": true,
+        "exactOptionalPropertyTypes": true,
+        "noImplicitAny": false,
 
-    // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
+        // Output
+        "sourceMap": true,
+        "declaration": true,
+        "declarationMap": true,
 
-    // Style Options
-    // "noImplicitReturns": true,
-    // "noImplicitOverride": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    // "noFallthroughCasesInSwitch": true,
-    // "noPropertyAccessFromIndexSignature": true,
+        // Module Interop
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "verbatimModuleSyntax": true,
+        "isolatedModules": true,
+        "noUncheckedSideEffectImports": true,
+        "moduleDetection": "auto",
 
-    // Recommended Options
-    "strict": true,
-    "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
-    "moduleDetection": "auto",
-    "skipLibCheck": true,
-
-    "moduleResolution": "node16",
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "noImplicitAny": false,
-  }
+        // Misc
+        "skipLibCheck": true,
+        "types": []
+    }
 }

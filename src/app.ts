@@ -2,9 +2,8 @@ import express from 'express';
 import type { Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import { router as authRouter } from './routes/auth.routes.js';
 import morgan from 'morgan';
-import { router as apiRouter } from './routes/index.js';
-import { errorHandler } from './middlewares/errorHandler.js';
 
 export function createApp(): Application {
   const app = express();
@@ -15,9 +14,8 @@ export function createApp(): Application {
   app.use(express.urlencoded({ extended: true }));
   app.use(morgan('dev'));
 
-  app.use('/api', apiRouter);
-
-  app.use(errorHandler);
+  app.get('/health', (_req, res) => res.json({ status: 'ok' }));
+  app.use('/auth', authRouter);
 
   return app;
 }

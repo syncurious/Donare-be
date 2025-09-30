@@ -1,39 +1,29 @@
-import type { Request, Response, NextFunction } from 'express';
-import { AuthService } from '../services/auth.service.js';
-
-const service = new AuthService();
-
-export async function signup(req: Request, res: Response, next: NextFunction) {
+export const signUp = async (req: Request, res: Response) => {
   try {
-    const body = req.body || {};
-    const email = body.email ?? body.username ?? body.user?.email;
-    const password = body.password ?? body.pass;
-    const full_name = body.full_name ?? body.name ?? body.fullName;
-    const city = body.city ?? body.location?.city ?? body.town;
-    const missing: string[] = [];
-    if (!email) missing.push('email');
-    if (!password) missing.push('password');
-    if (!full_name) missing.push('full_name');
-    if (!city) missing.push('city');
-    if (missing.length) return res.status(400).json({ message: `Missing fields: ${missing.join(', ')}` });
-    const result = await service.signup({ email, password, full_name, city });
-    res.status(201).json(result);
-  } catch (err) {
-    next(err);
+    let user: functionReturnObjectType = await authFunction.signUpWithEmail(req);
+    return response.basicControllerRes(res, user);
+  } catch (error) {
+    console.log(error);
+    return response.resInternalError(res, error);
   }
-}
+};
 
-export async function signin(req: Request, res: Response, next: NextFunction) {
+export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body || {};
-    if (!email || !password) {
-      return res.status(400).json({ message: 'email and password are required' });
-    }
-    const result = await service.signin({ email, password });
-    res.json(result);
-  } catch (err) {
-    next(err);
+    let user = await authFunction.signin(req);
+    return response.basicControllerRes(res, user);
+  } catch (error) {
+    console.log(error);
+    return response.resInternalError(res, error);
   }
-}
+};
 
-
+export const logout = async (req: RequestUserToken, res: Response) => {
+  try {
+    let user = await authFunction.logout(req);
+    return response.basicControllerRes(res, user);
+  } catch (error) {
+    console.log(error);
+    return response.resInternalError(res, error);
+  }
+};
