@@ -13,4 +13,14 @@ export const getProfile = async (req: Request, res: Response) => {
   }
 };
 
+export const getPreferences = async (req: Request, res: Response) => {
+  try {
+    const result: functionReturnObjectType = await UserService.getPreferences(req);
+    return response.basicControllerRes(res, result);
+  } catch (error) {
+    console.log(error);
+    return response.resInternalError(res, error);
+  }
+};
+
 

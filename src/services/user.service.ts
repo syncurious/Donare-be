@@ -27,18 +27,51 @@ export const getProfile = async (req: Request): Promise<functionReturnObjectType
     success: {
       data: {
         user: {
-          id: user._id?.toString?.() ?? (user as any).id,
           email: user.email,
           fullName: user.full_name,
-          city: user.city,
-          last_zakat_date: user.last_zakat_date,
-          zakat_reminders_enabled: user.zakat_reminders_enabled,
-          campaign_updates_enabled: user.campaign_updates_enabled,
-          created_at: user.created_at,
-          updated_at: user.updated_at,
+          phone: (user as any).phone ?? "",
+          profilePicture: (user as any).profilePicture ?? "",
         },
       },
       message: "Profile fetched successfully",
+      status: 200,
+    },
+  };
+};
+
+export const getPreferences = async (req: Request): Promise<functionReturnObjectType> => {
+  const { id } = (req as any).user || {};
+  if (!id) {
+    return {
+      error: {
+        status: 400,
+        message: "User id missing",
+      },
+    };
+  }
+
+  const user = await UserModel.findById(id)
+    .select("zakat_reminders_enabled campaign_updates_enabled last_zakat_date")
+    .lean();
+  if (!user) {
+    return {
+      error: {
+        status: 404,
+        message: "User not found",
+      },
+    };
+  }
+
+  return {
+    success: {
+      data: {
+        preferences: {
+          last_zakat_date: user.last_zakat_date ?? null,
+          zakat_reminders_enabled: user.zakat_reminders_enabled,
+          campaign_updates_enabled: user.campaign_updates_enabled,
+        },
+      },
+      message: "Preferences fetched successfully",
       status: 200,
     },
   };
