@@ -23,4 +23,24 @@ export const getPreferences = async (req: Request, res: Response) => {
   }
 };
 
+export const updateProfile = async (req: Request, res: Response) => {
+  try {
+    const result: functionReturnObjectType = await UserService.updateProfile(req);
+    return response.basicControllerRes(res, result);
+  } catch (error) {
+    console.log(error);
+    return response.resInternalError(res, error);
+  }
+};
+
+export const updatePreferences = async (req: Request, res: Response) => {
+  try {
+    const result: functionReturnObjectType = await UserService.updatePreferences(req);
+    return response.basicControllerRes(res, result);
+  } catch (error) {
+    console.log(error);
+    return response.resInternalError(res, error);
+  }
+};
+
 
