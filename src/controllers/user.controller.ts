@@ -1,0 +1,16 @@
+import response from "../utils/response.js";
+import type { Request, Response } from "express";
+import type { functionReturnObjectType } from "../types/index";
+import * as UserService from "../services/user.service";
+
+export const getProfile = async (req: Request, res: Response) => {
+  try {
+    const result: functionReturnObjectType = await UserService.getProfile(req);
+    return response.basicControllerRes(res, result);
+  } catch (error) {
+    console.log(error);
+    return response.resInternalError(res, error);
+  }
+};
+
+
