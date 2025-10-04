@@ -16,7 +16,7 @@ export const signup = async (
 ): Promise<functionReturnObjectType> => {
   const { email, password, full_name, city } = req.body;
   const exists = await UserModel.findOne({ email }).lean();
-  if (exists) {
+    if (exists) {
     return {
       error: {
         status: 409,
@@ -25,12 +25,12 @@ export const signup = async (
     };
   }
   const password_hash = await hashPassword(password);
-  const user = await UserModel.create({
+    const user = await UserModel.create({
     email: email,
     full_name: full_name,
     city: city,
-    password_hash,
-  });
+      password_hash,
+    });
   return {
     success: {
       data: {

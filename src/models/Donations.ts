@@ -43,6 +43,7 @@ export interface DonationsDocument extends Document {
   zakat_year?: number;
   zakat_calculation_method?: string; // "GOLD", "SILVER", "CASH", "INVESTMENTS", etc.
   zakat_assets_value?: number;
+  zakat_percentage?: number; // Default 2.5% for Sunni, can be different for Shia
   
   // Fitrah specific fields
   fitrah_year?: number;
@@ -82,6 +83,7 @@ const DonationsSchema = new Schema<DonationsDocument>(
     zakat_year: { type: Number },
     zakat_calculation_method: { type: String },
     zakat_assets_value: { type: Number },
+    zakat_percentage: { type: Number, default: 2.5 },
     
     // Fitrah specific fields
     fitrah_year: { type: Number },
