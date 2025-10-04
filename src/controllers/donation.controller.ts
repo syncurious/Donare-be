@@ -32,3 +32,13 @@ export const createSadaqah = async (req: Request, res: Response) => {
     return response.resInternalError(res, error);
   }
 };
+
+export const createOther = async (req: Request, res: Response) => {
+  try {
+    const result: functionReturnObjectType = await DonationService.createOther(req);
+    return response.basicControllerRes(res, result);
+  } catch (error) {
+    console.log(error);
+    return response.resInternalError(res, error);
+  }
+};
