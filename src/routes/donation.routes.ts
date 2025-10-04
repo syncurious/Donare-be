@@ -5,3 +5,4 @@ import { authMiddleware } from "../middlewares/auth.js";
 export const router = Router();
 
 router.post("/zakat", authMiddleware, DonationController.createZakat);
+router.post("/fitrah", authMiddleware, DonationController.createFitrah);

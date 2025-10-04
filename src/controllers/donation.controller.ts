@@ -12,3 +12,13 @@ export const createZakat = async (req: Request, res: Response) => {
     return response.resInternalError(res, error);
   }
 };
+
+export const createFitrah = async (req: Request, res: Response) => {
+  try {
+    const result: functionReturnObjectType = await DonationService.createFitrah(req);
+    return response.basicControllerRes(res, result);
+  } catch (error) {
+    console.log(error);
+    return response.resInternalError(res, error);
+  }
+};
