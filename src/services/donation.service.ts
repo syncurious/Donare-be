@@ -674,3 +674,156 @@ export const createDonation = async (req: Request): Promise<functionReturnObject
       };
   }
 };
+
+export const getDonations = async (req: Request): Promise<functionReturnObjectType> => {
+  const { id } = (req as any).user || {};
+  if (!id) {
+    return {
+      error: {
+        status: 400,
+        message: "User id missing",
+      },
+    };
+  }
+
+  try {
+    const donations = await DonationsModel.find({ user_id: id })
+      .select("-__v")
+      .sort({ created_at: -1 })
+      .lean();
+
+    const formattedDonations = donations.map(donation => ({
+      id: donation._id?.toString(),
+      donation_type: donation.donation_type,
+      amount: donation.amount,
+      description: donation.description,
+      is_in_kind: donation.is_in_kind,
+      item_name: donation.item_name,
+      item_image: donation.item_image,
+      donor_name: donation.donor_name,
+      donor_phone: donation.donor_phone,
+      pickup_address: donation.pickup_address,
+      // Zakat specific fields
+      zakat_year: donation.zakat_year,
+      zakat_calculation_method: donation.zakat_calculation_method,
+      zakat_assets_value: donation.zakat_assets_value,
+      zakat_percentage: donation.zakat_percentage,
+      // Fitrah specific fields
+      fitrah_year: donation.fitrah_year,
+      fitrah_calculation_method: donation.fitrah_calculation_method,
+      fitrah_amount: donation.fitrah_amount,
+      // Transaction details
+      transaction_id: donation.transaction_id,
+      payment_method: donation.payment_method,
+      payment_status: donation.payment_status,
+      status: donation.status,
+      created_at: donation.created_at,
+      updated_at: donation.updated_at,
+    }));
+
+    return {
+      success: {
+        data: {
+          donations: formattedDonations,
+          total: formattedDonations.length,
+        },
+        message: "Donations fetched successfully",
+        status: 200,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching donations:", error);
+    return {
+      error: {
+        status: 500,
+        message: "Failed to fetch donations",
+      },
+    };
+  }
+};
+
+export const getDonationById = async (req: Request): Promise<functionReturnObjectType> => {
+  const { id } = (req as any).user || {};
+  const { id: donationId } = req.params;
+  
+  if (!id) {
+    return {
+      error: {
+        status: 400,
+        message: "User id missing",
+      },
+    };
+  }
+
+  if (!donationId) {
+    return {
+      error: {
+        status: 400,
+        message: "Donation id is required",
+      },
+    };
+  }
+
+  try {
+    const donation = await DonationsModel.findOne({ 
+      _id: donationId, 
+      user_id: id 
+    }).select("-__v").lean();
+
+    if (!donation) {
+      return {
+        error: {
+          status: 404,
+          message: "Donation not found",
+        },
+      };
+    }
+
+    const formattedDonation = {
+      id: donation._id?.toString(),
+      donation_type: donation.donation_type,
+      amount: donation.amount,
+      description: donation.description,
+      is_in_kind: donation.is_in_kind,
+      item_name: donation.item_name,
+      item_image: donation.item_image,
+      donor_name: donation.donor_name,
+      donor_phone: donation.donor_phone,
+      pickup_address: donation.pickup_address,
+      // Zakat specific fields
+      zakat_year: donation.zakat_year,
+      zakat_calculation_method: donation.zakat_calculation_method,
+      zakat_assets_value: donation.zakat_assets_value,
+      zakat_percentage: donation.zakat_percentage,
+      // Fitrah specific fields
+      fitrah_year: donation.fitrah_year,
+      fitrah_calculation_method: donation.fitrah_calculation_method,
+      fitrah_amount: donation.fitrah_amount,
+      // Transaction details
+      transaction_id: donation.transaction_id,
+      payment_method: donation.payment_method,
+      payment_status: donation.payment_status,
+      status: donation.status,
+      created_at: donation.created_at,
+      updated_at: donation.updated_at,
+    };
+
+    return {
+      success: {
+        data: {
+          donation: formattedDonation,
+        },
+        message: "Donation fetched successfully",
+        status: 200,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching donation:", error);
+    return {
+      error: {
+        status: 500,
+        message: "Failed to fetch donation",
+      },
+    };
+  }
+};
