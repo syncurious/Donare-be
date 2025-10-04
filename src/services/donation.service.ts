@@ -642,3 +642,35 @@ export const createOther = async (req: Request): Promise<functionReturnObjectTyp
     };
   }
 };
+
+export const createDonation = async (req: Request): Promise<functionReturnObjectType> => {
+  const { donation_type } = req.body || {};
+  
+  if (!donation_type) {
+    return {
+      error: {
+        status: 400,
+        message: "donation_type is required",
+      },
+    };
+  }
+
+  // Route to appropriate service based on donation type
+  switch (donation_type.toUpperCase()) {
+    case 'ZAKAT':
+      return await createZakat(req);
+    case 'FITRAH':
+      return await createFitrah(req);
+    case 'SADAQAH':
+      return await createSadaqah(req);
+    case 'OTHER':
+      return await createOther(req);
+    default:
+      return {
+        error: {
+          status: 400,
+          message: "Invalid donation_type. Must be one of: ZAKAT, FITRAH, SADAQAH, OTHER",
+        },
+      };
+  }
+};
