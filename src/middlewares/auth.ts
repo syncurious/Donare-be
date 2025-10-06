@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
+import response from '../utils/response.js';
 
 const DEFAULT_EXP_SECONDS = 60 * 60 * 24 * 7; // 7 days
 
@@ -28,13 +29,17 @@ export function verifyToken(token: string): any | null {
 }
 
 export function authMiddleware(req: Request, res: Response, next: NextFunction) {
-  const auth = req.headers.authorization;
-  if (!auth?.startsWith('Bearer ')) return res.status(401).json({ message: 'Unauthorized' });
-  const token = auth.slice(7);
-  const payload = verifyToken(token);
-  if (!payload) return res.status(401).json({ message: 'Invalid token' });
-  (req as any).user = payload;
-  next();
+  try {
+    const auth = req.headers.authorization;
+    if (!auth?.startsWith('Bearer ')) return response.resUnauthorized(res, 'Unauthorized');
+    const token = auth.slice(7);
+    const payload = verifyToken(token);
+    if (!payload) return response.resUnauthorized(res, 'Invalid token');
+    (req as any).user = payload;
+    next();
+  } catch (err) {
+    return response.resInternalError(res, err);
+  }
 }
 
 
