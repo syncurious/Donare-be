@@ -27,6 +27,7 @@ export interface RequestUserToken extends Request {
     exp: number;
   };
   files?: File | any;
+  file?: File | any;
 }
 
 export interface File {
