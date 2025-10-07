@@ -16,4 +16,4 @@ router.use("/volunteer", VolunteerRouter);
 router.use("/help-request", HelpRequestRouter);
 router.use("/causes", CausesRouter);
 router.use("/admin", AdminRouter);
-router.use("/", FileRouter);
+router.use("/file", FileRouter);
