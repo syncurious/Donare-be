@@ -5,5 +5,6 @@ import { authMiddleware } from "../middlewares/auth";
 export const router = Router();
 
 router.post("/register", authMiddleware, VolunteerController.register);
+router.get("/", authMiddleware, VolunteerController.get);
 
 

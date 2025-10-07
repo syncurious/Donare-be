@@ -13,4 +13,14 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
+export const get = async (req: Request, res: Response) => {
+  try {
+    const result: functionReturnObjectType = await VolunteerService.get(req);
+    return response.basicControllerRes(res, result);
+  } catch (error) {
+    console.log(error);
+    return response.resInternalError(res, error);
+  }
+};
+
 
