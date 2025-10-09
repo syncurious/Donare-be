@@ -1,6 +1,6 @@
 import type { Request } from "express";
-import { CausesModel, MediaType } from "../models/Causes.js";
-import type { functionReturnObjectType } from "../types/index.js";
+import { CausesModel, MediaType } from "../models/Causes";
+import type { functionReturnObjectType } from "../types/index";
 
 export const create = async (
   req: Request

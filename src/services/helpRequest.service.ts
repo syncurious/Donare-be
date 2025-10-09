@@ -1,6 +1,6 @@
 import type { Request } from "express";
-import { HelpRequestsModel, Status } from "../models/HelpRequests.js";
-import type { functionReturnObjectType } from "../types/index.js";
+import { HelpRequestsModel, Status } from "../models/HelpRequests";
+import type { functionReturnObjectType } from "../types/index";
 
 export const create = async (req: Request): Promise<functionReturnObjectType> => {
   const { id } = (req as any).user || {};

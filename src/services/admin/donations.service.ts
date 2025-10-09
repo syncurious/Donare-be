@@ -1,6 +1,6 @@
 import type { Request } from "express";
-import { DonationsModel, DonationType } from "../../models/Donations.js";
-import type { functionReturnObjectType } from "../../types/index.js";
+import { DonationsModel, DonationType } from "../../models/Donations";
+import type { functionReturnObjectType } from "../../types/index";
 
 export const list = async (req: Request): Promise<functionReturnObjectType> => {
   const { type } = req.query as { type?: string };

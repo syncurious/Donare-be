@@ -1,5 +1,5 @@
-import { UserModel as user } from "../models/User.js";
-import { userProjectionData } from "./filters.js";
+import { UserModel as user } from "../models/User";
+import { userProjectionData } from "./filters";
 
 export let getUserByEmail = async (email: string) => {
   let User = await user.findOne({ email: email });

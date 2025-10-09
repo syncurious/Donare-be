@@ -1,6 +1,6 @@
-import { UserModel } from "../models/User.js";
-import type { functionReturnObjectType } from "../types/index.js";
-import { comparePassword, hashPassword } from "../utils/password.js";
+import { UserModel } from "../models/User";
+import type { functionReturnObjectType } from "../types/index";
+import { comparePassword, hashPassword } from "../utils/password";
 import type { Request, Response } from "express";
 import tokens from "../utils/token";
 

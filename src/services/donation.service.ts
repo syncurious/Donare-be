@@ -1,6 +1,6 @@
 import type { Request } from "express";
-import { DonationsModel, DonationType, DonationStatus, PaymentStatus } from "../models/Donations.js";
-import type { functionReturnObjectType } from "../types/index.js";
+import { DonationsModel, DonationType, DonationStatus, PaymentStatus } from "../models/Donations";
+import type { functionReturnObjectType } from "../types/index";
 
 export const createZakat = async (req: Request): Promise<functionReturnObjectType> => {
   const { id } = (req as any).user || {};

@@ -1,9 +1,9 @@
-import response from "../utils/response.js";
+import response from "../utils/response";
 import type { Request, Response } from "express";
-import type { functionReturnObjectType } from "../types/index.js";
-import * as AuthService  from "../services/auth.service.js";
+import type { functionReturnObjectType } from "../types/index";
+import * as AuthService  from "../services/auth.service";
 
-import type { RequestUserToken } from "../types/index.js";
+import type { RequestUserToken } from "../types/index";
 
 export const signUp = async (req: Request, res: Response) => {
   try {

@@ -1,6 +1,6 @@
 import type { Request } from "express";
-import { VolunteersModel, AvailabilityStatus } from "../models/Volunteers.js";
-import type { functionReturnObjectType } from "../types/index.js";
+import { VolunteersModel, AvailabilityStatus } from "../models/Volunteers";
+import type { functionReturnObjectType } from "../types/index";
 
 export const register = async (req: Request): Promise<functionReturnObjectType> => {
   const { id } = (req as any).user || {};

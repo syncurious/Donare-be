@@ -1,7 +1,7 @@
-import response from "../utils/response.js";
+import response from "../utils/response";
 import type { Request, Response } from "express";
-import type { functionReturnObjectType } from "../types/index.js";
-import * as VolunteerService from "../services/volunteer.service.js";
+import type { functionReturnObjectType } from "../types/index";
+import * as VolunteerService from "../services/volunteer.service";
 
 export const register = async (req: Request, res: Response) => {
   try {
