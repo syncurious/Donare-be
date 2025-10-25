@@ -1,7 +1,6 @@
-import type { RequestUserToken } from "../types/index.js";
-import type { functionReturnObjectType } from "../types/index.js";
-// const aws = require("../middlewares/aws.js");
-import aws from "../middlewares/aws";
+import type { RequestUserToken } from "../types/index";
+import type { functionReturnObjectType } from "../types/index";
+const aws = require("../middlewares/aws.js");
 
 export const uploadFile = async (
   req: RequestUserToken

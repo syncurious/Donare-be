@@ -1,7 +1,7 @@
-import response from "../utils/response.js";
+import response from "../utils/response";
 import type { Request, Response } from "express";
-import type { functionReturnObjectType } from "../types/index.js";
-import * as CausesService from "../services/causes.service.js";
+import type { functionReturnObjectType } from "../types/index";
+import * as CausesService from "../services/causes.service";
 
 export const create = async (req: Request, res: Response) => {
   try {

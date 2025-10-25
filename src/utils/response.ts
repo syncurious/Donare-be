@@ -1,7 +1,7 @@
 // -------------------------------------------------
 
 import type { Response } from "express";
-import type { functionReturnObjectType } from "../types/index.js";
+import type { functionReturnObjectType } from "../types/index";
 
 // Write Response Function
 function writeResponse(res: Response, statusCode: number, msg?: string | any) {

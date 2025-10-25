@@ -1,4 +1,4 @@
-import type { RequestUserToken } from "../types/index.js";
+import type { RequestUserToken } from "../types/index";
 const { s3UploadObject, s3DeleteObject } = require("../middlewares");
 
 export const uploadFile = async (req: RequestUserToken) => {
