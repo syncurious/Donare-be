@@ -33,7 +33,6 @@ const HelpRequestsSchema = new Schema<HelpRequestsDocument>(
       enum: Object.values(Status), 
       default: Status.PENDING 
     },
-    message: { type: String, required: true },
     full_name: { type: String, required: true },
     phone: { type: String },
     address: { type: String },
@@ -47,3 +46,5 @@ const HelpRequestsSchema = new Schema<HelpRequestsDocument>(
 );
 
 export const HelpRequestsModel = model<HelpRequestsDocument>('HelpRequests', HelpRequestsSchema);
+
+

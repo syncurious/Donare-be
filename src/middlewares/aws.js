@@ -1,6 +1,6 @@
-import multer from "multer";
-import aws from "aws-sdk";
-import dotenv from "dotenv";
+const multer = require("multer");
+const aws = require("aws-sdk");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
