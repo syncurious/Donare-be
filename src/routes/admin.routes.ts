@@ -2,10 +2,19 @@ import { Router } from "express";
 import * as AdminVolunteerController from "../controllers/admin/volunteer.controller";
 import * as AdminHelpRequestController from "../controllers/admin/helpRequest.controller";
 import * as AdminDonationsController from "../controllers/admin/donations.controller";
+import * as AdminDashboardController from "../controllers/admin/dashboard.controller";
 import { authMiddleware } from "../middlewares/auth";
 import { authorize } from "../middlewares/authorize";
 
 export const router = Router();
+
+// Dashboard stats route
+router.get(
+  "/dashboard",
+  authMiddleware,
+  authorize("admin"),
+  AdminDashboardController.getDashboardStats
+);
 
 router.get(
   "/volunteer",
