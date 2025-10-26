@@ -29,6 +29,7 @@ export const signup = async (
     email: email,
     full_name: full_name,
     city: city,
+    role: 'user', // Default to 'user' if not provided
       password_hash,
     });
   return {
@@ -39,6 +40,7 @@ export const signup = async (
           email: user.email,
           fullName: user.full_name,
           city: user.city,
+          role: user.role,
         },
         token: tokens.generateToken(
           {
@@ -46,6 +48,7 @@ export const signup = async (
             email: user.email,
             fullName: user.full_name,
             city: user.city,
+            role: user.role,
           },
           process.env.TOKEN_SECRET || "",
           { expiresIn: "7d" }
@@ -91,6 +94,7 @@ export const signin = async (
       email: user.email,
       fullName: user.full_name,
       city: user.city,
+      role: user.role,
     },
     process.env.TOKEN_SECRET || "",
     { expiresIn: "7d" }
@@ -103,6 +107,7 @@ export const signin = async (
           email: user.email,
           fullName: user.full_name,
           city: user.city,
+          role: user.role,
         },
         token: tokenStr,
       },
