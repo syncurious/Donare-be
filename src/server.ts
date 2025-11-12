@@ -2,12 +2,14 @@ import 'dotenv/config';
 import { createServer } from 'http';
 import { createApp } from './app';
 import { connectToDatabase } from './config/database';
+import { registerJobs } from './jobs';
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3001;
 
 async function main() {
   await connectToDatabase();
   const app = createApp();
+  registerJobs();
   const server = createServer(app);
   server.listen(PORT, () => {
     // eslint-disable-next-line no-console

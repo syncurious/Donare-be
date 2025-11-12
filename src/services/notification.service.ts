@@ -51,6 +51,14 @@ export interface SendNotificationParams {
   data?: Record<string, string>;
 }
 
+const chunkArray = <T>(arr: T[], size: number): T[][] => {
+  const chunks: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) {
+    chunks.push(arr.slice(i, i + size));
+  }
+  return chunks;
+};
+
 export const sendNotification = async (
   params: SendNotificationParams
 ): Promise<functionReturnObjectType> => {
@@ -77,23 +85,33 @@ export const sendNotification = async (
       };
     }
 
-    const response = await messaging.sendEachForMulticast({
-      tokens,
-      notification: {
-        title: params.title,
-        body: params.body,
-      },
-      data: params.data,
-    });
+    const batches = chunkArray(tokens, 500);
+    let successCount = 0;
+    let failureCount = 0;
+    const responses: any[] = [];
+
+    for (const batch of batches) {
+      const resp = await messaging.sendEachForMulticast({
+        tokens: batch,
+        notification: {
+          title: params.title,
+          body: params.body,
+        },
+        data: params.data,
+      });
+      successCount += resp.successCount;
+      failureCount += resp.failureCount;
+      responses.push(...resp.responses);
+    }
 
     return {
       success: {
         status: 200,
         message: "Notifications sent",
         data: {
-          success_count: response.successCount,
-          failure_count: response.failureCount,
-          responses: response.responses,
+          success_count: successCount,
+          failure_count: failureCount,
+          responses,
         },
       },
     };
