@@ -40,7 +40,7 @@ export const signup = async (
     fullName: user.full_name,
     city: user.city,
     role: user.role,
-    deviceId: user.device_id,
+    // deviceId: user.device_id,
   };
   return {
     success: {
@@ -97,7 +97,7 @@ export const signin = async (
     fullName: user.full_name,
     city: user.city,
     role: user.role,
-    deviceId: (user as any).device_id,
+    // deviceId: (user as any).device_id,
   };
 
   const tokenStr = tokens.generateToken(
