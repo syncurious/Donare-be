@@ -1,6 +1,8 @@
 import type { Request } from "express";
 import { HelpRequestsModel, Status } from "../../models/HelpRequests";
 import type { functionReturnObjectType } from "../../types/index";
+import { UserModel } from "../../models/User";
+import { sendNotification } from "../notification.service";
 
 export const list = async (req: Request): Promise<functionReturnObjectType> => {
   const { status } = req.query as { status?: string };
@@ -58,9 +60,31 @@ export const updateStatus = async (req: Request): Promise<functionReturnObjectTy
     id,
     { $set: { status: upper } },
     { new: true }
-  ).lean();
+  ).populate({
+    path: "user_id",
+    model: UserModel,
+    select: "device_id full_name phone email profile_picture"
+  }).lean();
 
   if (!updated) return { error: { status: 404, message: "Help request not found" } };
+
+  const tokens = (updated as any).user_id?.device_id;
+  const notificationPayload = {
+    title: "Help Request Update",
+    body: "",
+  }
+  if (tokens) {
+    if (status === Status.APPROVED) {
+      notificationPayload.body = `${updated?.full_name} you'er help Request has been approved. our Team will contact you soon.`;
+    } else if (status === Status.REJECTED) {
+      notificationPayload.body = `${updated?.full_name} we're sorry to inform you that your help Request has been rejected.`;
+    }
+    let result = await sendNotification({
+      tokens: tokens,
+      title: notificationPayload.title,
+      body: notificationPayload.body,
+    });
+  }
 
   return {
     success: {

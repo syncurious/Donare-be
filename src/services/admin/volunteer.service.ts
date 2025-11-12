@@ -1,6 +1,8 @@
 import type { Request } from "express";
 import { VolunteersModel, Status } from "../../models/Volunteers";
 import type { functionReturnObjectType } from "../../types/index";
+import { sendNotification } from "../notification.service";
+import { UserModel } from "../../models/User";
 
 export const list = async (req: Request): Promise<functionReturnObjectType> => {
   const { status } = req.query as { status?: string };
@@ -60,11 +62,33 @@ export const updateStatus = async (req: Request): Promise<functionReturnObjectTy
   const updated = await VolunteersModel.findByIdAndUpdate(
     id,
     { $set: { status: upper } },
-    { new: true }
-  ).lean();
+    { new: true}
+  ).populate({
+    path: "user_id",
+    model: UserModel,
+    select: "device_id full_name phone email profile_picture"
+  }).lean();
 
   if (!updated) {
     return { error: { status: 404, message: "Volunteer not found" } };
+  }
+  
+  const tokens = (updated as any).user_id?.device_id;
+  const notificationPayload = {
+    title: "Volunteer Application Update",
+    body: "",
+  }
+  if (tokens) {
+    if (status === Status.APPROVED) {
+      notificationPayload.body = `${updated?.full_name} has been approved as a volunteer. our Team will contact you.`;
+    } else if (status === Status.REJECTED) {
+      notificationPayload.body = `${updated?.full_name} we're sorry to inform you that your application has been rejected.`;
+    }
+    let result = await sendNotification({
+      tokens: tokens,
+      title: notificationPayload.title,
+      body: notificationPayload.body,
+    });
   }
 
   return {
