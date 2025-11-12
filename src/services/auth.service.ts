@@ -134,6 +134,8 @@ export const logout = async (
     };
   }
 
+  await UserModel.updateOne({ _id: decoded.id as string || decoded._id as string }, { device_id: null });
+  (decoded as any).device_id = null;
   return {
     success: {
       message: "Logout successful",
