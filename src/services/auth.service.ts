@@ -15,7 +15,7 @@ export interface SignupDto {
 export const signup = async (
   req: Request
 ): Promise<functionReturnObjectType> => {
-  const { email, password, full_name, city, device_id } = req.body;
+  const { email, password, full_name, city, fcm_token: device_id } = req.body;
   const exists = await UserModel.findOne({ email }).lean();
   if (exists) {
     return {
@@ -62,7 +62,7 @@ export const signin = async (
   req: Request,
   res: Response
 ): Promise<functionReturnObjectType> => {
-  const { email, password, device_id } = req.body;
+  const { email, password, fcm_token: device_id } = req.body;
   const user = await UserModel.findOne({ email }).lean();
   if (!user) {
     return {
@@ -141,4 +141,3 @@ export const logout = async (
     },
   };
 };
-
