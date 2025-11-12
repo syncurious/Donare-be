@@ -15,6 +15,7 @@ export interface UserDocument extends Document {
   campaign_updates_enabled: boolean;
   created_at: Date;
   updated_at: Date;
+  device_id?: string;
   supabase_user_id?: string;
 }
 
@@ -31,6 +32,7 @@ const UserSchema = new Schema<UserDocument>(
     last_zakat_date: { type: Date },
     zakat_reminders_enabled: { type: Boolean, default: false },
     campaign_updates_enabled: { type: Boolean, default: false },
+    device_id: { type: String },
     supabase_user_id: { type: String },
   },
   { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }

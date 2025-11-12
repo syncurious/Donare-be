@@ -9,14 +9,15 @@ export interface SignupDto {
   password: string;
   fullName: string;
   city: string;
+  deviceId?: string;
 }
 
 export const signup = async (
   req: Request
 ): Promise<functionReturnObjectType> => {
-  const { email, password, full_name, city } = req.body;
+  const { email, password, full_name, city, device_id } = req.body;
   const exists = await UserModel.findOne({ email }).lean();
-    if (exists) {
+  if (exists) {
     return {
       error: {
         status: 409,
@@ -25,31 +26,28 @@ export const signup = async (
     };
   }
   const password_hash = await hashPassword(password);
-    const user = await UserModel.create({
-    email: email,
-    full_name: full_name,
-    city: city,
-    role: 'user', // Default to 'user' if not provided
-      password_hash,
-    });
+  const user = await UserModel.create({
+    email,
+    full_name,
+    city,
+    role: "user",
+    password_hash,
+    device_id,
+  });
+  const tokenPayload = {
+    id: user?._id?.toString(),
+    email: user.email,
+    fullName: user.full_name,
+    city: user.city,
+    role: user.role,
+    deviceId: user.device_id,
+  };
   return {
     success: {
       data: {
-        user: {
-          id: user?._id?.toString(),
-          email: user.email,
-          fullName: user.full_name,
-          city: user.city,
-          role: user.role,
-        },
+        user: tokenPayload,
         token: tokens.generateToken(
-          {
-            id: user?._id?.toString(),
-            email: user.email,
-            fullName: user.full_name,
-            city: user.city,
-            role: user.role,
-          },
+          tokenPayload,
           process.env.TOKEN_SECRET || "",
           { expiresIn: "7d" }
         ),
@@ -64,7 +62,7 @@ export const signin = async (
   req: Request,
   res: Response
 ): Promise<functionReturnObjectType> => {
-  const { email, password } = req.body;
+  const { email, password, device_id } = req.body;
   const user = await UserModel.findOne({ email }).lean();
   if (!user) {
     return {
@@ -88,27 +86,29 @@ export const signin = async (
     };
   }
 
+  if (device_id) {
+    await UserModel.updateOne({ _id: user._id }, { device_id });
+    (user as any).device_id = device_id;
+  }
+
+  const tokenPayload = {
+    id: user._id,
+    email: user.email,
+    fullName: user.full_name,
+    city: user.city,
+    role: user.role,
+    deviceId: (user as any).device_id,
+  };
+
   const tokenStr = tokens.generateToken(
-    {
-      id: user._id,
-      email: user.email,
-      fullName: user.full_name,
-      city: user.city,
-      role: user.role,
-    },
+    tokenPayload,
     process.env.TOKEN_SECRET || "",
     { expiresIn: "7d" }
   );
   return {
     success: {
       data: {
-        user: {
-          id: user._id,
-          email: user.email,
-          fullName: user.full_name,
-          city: user.city,
-          role: user.role,
-        },
+        user: tokenPayload,
         token: tokenStr,
       },
       message: "Login successful",
@@ -141,3 +141,4 @@ export const logout = async (
     },
   };
 };
+
