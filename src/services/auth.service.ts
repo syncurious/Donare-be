@@ -120,22 +120,10 @@ export const signin = async (
 export const logout = async (
   req: Request
 ): Promise<functionReturnObjectType> => {
-  const { token } = req.body;
-  const decoded =
-    token && typeof token === "string"
-      ? tokens.verifyToken(token, process.env.JWT_SECRET || "")
-      : null;
-  if (!decoded) {
-    return {
-      error: {
-        status: 401,
-        message: "Invalid token",
-      },
-    };
-  }
+  const { id } = req.body;
+ 
 
-  await UserModel.updateOne({ _id: decoded.id as string || decoded._id as string }, { device_id: null });
-  (decoded as any).device_id = null;
+  await UserModel.updateOne({ _id: id }, { device_id: null });
   return {
     success: {
       message: "Logout successful",
