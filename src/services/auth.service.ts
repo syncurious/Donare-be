@@ -1,5 +1,5 @@
 import { UserModel } from "../models/User";
-import type { functionReturnObjectType } from "../types/index";
+import type { functionReturnObjectType, RequestUserToken } from "../types/index";
 import { comparePassword, hashPassword } from "../utils/password";
 import type { Request, Response } from "express";
 import tokens from "../utils/token";
@@ -118,9 +118,9 @@ export const signin = async (
 };
 
 export const logout = async (
-  req: Request
+  req: RequestUserToken
 ): Promise<functionReturnObjectType> => {
-  const { id } = req.body;
+  const { id } = req.user;
  
 
   await UserModel.updateOne({ _id: id }, { device_id: null });
