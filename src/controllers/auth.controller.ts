@@ -26,9 +26,9 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-export const logout = async (req: RequestUserToken, res: Response) => {
+export const logout = async (req: Request, res: Response) => {
   try {
-    let user = await AuthService.logout(req);
+    let user = await AuthService.logout(req as RequestUserToken);
     return response.basicControllerRes(res, user);
   } catch (error) {
     console.log(error);
