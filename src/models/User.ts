@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
-import type { Document } from 'mongoose';
+import { Schema, model } from "mongoose";
+import type { Document } from "mongoose";
 
 export interface UserDocument extends Document {
   email: string;
@@ -9,6 +9,9 @@ export interface UserDocument extends Document {
   role?: string;
   phone?: string;
   profile_picture?: string;
+  current_city?: string;
+  lat?: number;
+  lng?: number;
   // Keep existing preference fields for backward compatibility
   last_zakat_date?: Date;
   zakat_reminders_enabled: boolean;
@@ -25,9 +28,12 @@ const UserSchema = new Schema<UserDocument>(
     password_hash: { type: String },
     full_name: { type: String, required: true },
     city: { type: String, required: true },
-    role: { type: String, default: 'user' },
+    role: { type: String, default: "user" },
     phone: { type: String },
     profile_picture: { type: String },
+    current_city: { type: String },
+    lat: { type: Number },
+    lng: { type: Number },
     // Keep existing preference fields for backward compatibility
     last_zakat_date: { type: Date },
     zakat_reminders_enabled: { type: Boolean, default: false },
@@ -35,9 +41,7 @@ const UserSchema = new Schema<UserDocument>(
     device_id: { type: String },
     supabase_user_id: { type: String },
   },
-  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+  { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );
 
-export const UserModel = model<UserDocument>('User', UserSchema);
-
-
+export const UserModel = model<UserDocument>("User", UserSchema);
